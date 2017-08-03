@@ -14,7 +14,10 @@ namespace EnGuarde
 
     public static GuardInvoker ThrowIf(bool condition, string msg) =>
       invoker.ThrowIf(condition, msg);
-    
+
+    public static GuardInvoker ThrowIf(params (bool condition, string errorMessage)[] args) =>
+      invoker.ThrowIf(args);
+
   }
 
   public class GuardInvoker
@@ -42,6 +45,14 @@ namespace EnGuarde
     {
       if (condition)
         throw new ArgumentException(msg);
+
+      return this;
+    }
+
+    public GuardInvoker ThrowIf(params (bool condition, string errorMessage)[] args)
+    {
+      foreach (var a in args)
+        ThrowIf(a.condition, a.errorMessage);
 
       return this;
     }
